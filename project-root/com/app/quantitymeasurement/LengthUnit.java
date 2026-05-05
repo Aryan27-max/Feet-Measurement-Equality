@@ -15,6 +15,11 @@ public enum LengthUnit implements Unit {
 
     @Override
     public double toBase(double value) {
-        return value * factor; // base = inches
+        return value * factor;
+    }
+
+    @Override
+    public double fromBase(double baseValue) {
+        return baseValue / factor;
     }
 }

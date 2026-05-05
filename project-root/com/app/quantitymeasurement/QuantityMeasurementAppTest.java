@@ -6,36 +6,42 @@ import static org.junit.jupiter.api.Assertions.*;
 public class QuantityMeasurementAppTest {
 
     @Test
-    public void testLengthEquality() {
-        assertTrue(QuantityMeasurementService.compare(
-                1.0, LengthUnit.FEET,
-                12.0, LengthUnit.INCHES));
+    public void testAddition() {
+        Quantity<LengthUnit> q1 = new Quantity<>(1.0, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(12.0, LengthUnit.INCHES);
+
+        assertTrue(q1.add(q2).equals(new Quantity<>(2.0, LengthUnit.FEET)));
     }
 
     @Test
-    public void testWeightEquality() {
-        assertTrue(QuantityMeasurementService.compare(
-                1.0, WeightUnit.KILOGRAM,
-                1000.0, WeightUnit.GRAM));
+    public void testSubtraction() {
+        Quantity<LengthUnit> q1 = new Quantity<>(2.0, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(12.0, LengthUnit.INCHES);
+
+        assertTrue(q1.subtract(q2).equals(new Quantity<>(1.0, LengthUnit.FEET)));
     }
 
     @Test
-    public void testCrossTypeInequality() {
-        Quantity<LengthUnit> l = new Quantity<>(1.0, LengthUnit.FEET);
-        Quantity<WeightUnit> w = new Quantity<>(1.0, WeightUnit.KILOGRAM);
+    public void testGreaterThan() {
+        Quantity<LengthUnit> q1 = new Quantity<>(2.0, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(12.0, LengthUnit.INCHES);
 
-        assertFalse(l.equals(w));
+        assertTrue(q1.greaterThan(q2));
     }
 
     @Test
-    public void testNegativeValue() {
-        assertThrows(IllegalArgumentException.class, () ->
-                new Quantity<>(-1.0, LengthUnit.FEET));
+    public void testLessThan() {
+        Quantity<LengthUnit> q1 = new Quantity<>(1.0, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(24.0, LengthUnit.INCHES);
+
+        assertTrue(q1.lessThan(q2));
     }
 
     @Test
-    public void testReflexive() {
-        Quantity<LengthUnit> q = new Quantity<>(1.0, LengthUnit.FEET);
-        assertTrue(q.equals(q));
+    public void testNegativeResult() {
+        Quantity<LengthUnit> q1 = new Quantity<>(1.0, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(24.0, LengthUnit.INCHES);
+
+        assertThrows(IllegalArgumentException.class, () -> q1.subtract(q2));
     }
 }

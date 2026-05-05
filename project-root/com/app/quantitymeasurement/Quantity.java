@@ -11,13 +11,11 @@ public class Quantity<U extends Unit> {
 
     public Quantity(double value, U unit) {
 
-        if (unit == null) {
+        if (unit == null)
             throw new IllegalArgumentException("Unit cannot be null");
-        }
 
-        if (value < 0) {
+        if (value < 0)
             throw new IllegalArgumentException("Value cannot be negative");
-        }
 
         this.value = value;
         this.unit = unit;
@@ -27,9 +25,35 @@ public class Quantity<U extends Unit> {
         return unit.toBase(value);
     }
 
+    // ===== UC13 FEATURE 1: ADD =====
+    public Quantity<U> add(Quantity<U> other) {
+        double sum = this.toBase() + other.toBase();
+        return new Quantity<>(unit.fromBase(sum), unit);
+    }
+
+    // ===== UC13 FEATURE 2: SUBTRACT =====
+    public Quantity<U> subtract(Quantity<U> other) {
+        double diff = this.toBase() - other.toBase();
+
+        if (diff < 0)
+            throw new IllegalArgumentException("Result cannot be negative");
+
+        return new Quantity<>(unit.fromBase(diff), unit);
+    }
+
+    // ===== UC13 FEATURE 3: GREATER THAN =====
+    public boolean greaterThan(Quantity<U> other) {
+        return this.toBase() > other.toBase();
+    }
+
+    // ===== UC13 FEATURE 4: LESS THAN =====
+    public boolean lessThan(Quantity<U> other) {
+        return this.toBase() < other.toBase();
+    }
+
+    // ===== EQUALITY =====
     public boolean isEqual(Quantity<U> other) {
-        double diff = Math.abs(this.toBase() - other.toBase());
-        return diff < EPSILON;
+        return Math.abs(this.toBase() - other.toBase()) < EPSILON;
     }
 
     @Override
@@ -39,10 +63,8 @@ public class Quantity<U extends Unit> {
 
         Quantity<?> other = (Quantity<?>) obj;
 
-        // Prevent cross-type comparison (Length vs Weight)
-        if (!this.unit.getClass().equals(other.unit.getClass())) {
+        if (!this.unit.getClass().equals(other.unit.getClass()))
             return false;
-        }
 
         return Math.abs(this.toBase() - other.toBase()) < EPSILON;
     }

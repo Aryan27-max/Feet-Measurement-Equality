@@ -4,32 +4,19 @@ public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        // ===== LENGTH =====
-        System.out.println(
-                QuantityMeasurementService.compare(
-                        1.0, LengthUnit.FEET,
-                        12.0, LengthUnit.INCHES)); // true
+        Quantity<LengthUnit> q1 = new Quantity<>(1.0, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(12.0, LengthUnit.INCHES);
 
-        System.out.println(
-                QuantityMeasurementService.compare(
-                        1.0, LengthUnit.YARDS,
-                        36.0, LengthUnit.INCHES)); // true
+        System.out.println("Equal: " + q1.equals(q2));
 
-        // ===== WEIGHT =====
-        System.out.println(
-                QuantityMeasurementService.compare(
-                        1.0, WeightUnit.KILOGRAM,
-                        1000.0, WeightUnit.GRAM)); // true
+        // ADD
+        System.out.println("Add: " + q1.add(q2));
 
-        System.out.println(
-                QuantityMeasurementService.compare(
-                        1.0, WeightUnit.KILOGRAM,
-                        2.0, WeightUnit.POUND)); // false
+        // SUBTRACT
+        System.out.println("Subtract: " + q1.subtract(q2));
 
-        // ===== INVALID CROSS TYPE =====
-        Quantity<LengthUnit> length = new Quantity<>(1.0, LengthUnit.FEET);
-        Quantity<WeightUnit> weight = new Quantity<>(1.0, WeightUnit.KILOGRAM);
-
-        System.out.println(length.equals(weight)); // false
+        // COMPARISON
+        System.out.println("Greater: " + q1.greaterThan(q2));
+        System.out.println("Less: " + q1.lessThan(q2));
     }
 }
