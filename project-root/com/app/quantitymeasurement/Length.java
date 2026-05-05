@@ -5,6 +5,8 @@ public class Length {
     private final double value;
     private final LengthUnit unit;
 
+    private static final double EPSILON = 0.0001; // precision handling
+
     // ===== ENUM =====
     public enum LengthUnit {
         FEET(12.0),
@@ -33,42 +35,31 @@ public class Length {
     }
 
     // ===== CONVERT TO BASE UNIT (INCHES) =====
-    private double convertToBaseUnit() {
+    private double toBaseUnit() {
         return this.value * this.unit.getConversionFactor();
     }
 
-    // ===== COMPARE =====
-    public boolean compare(Length thatLength) {
-        return Double.compare(
-                this.convertToBaseUnit(),
-                thatLength.convertToBaseUnit()
-        ) == 0;
+    // ===== PRECISION SAFE COMPARISON =====
+    public boolean compare(Length other) {
+        double diff = Math.abs(this.toBaseUnit() - other.toBaseUnit());
+        return diff < EPSILON;
     }
 
-    // ===== EQUALS =====
+    // ===== EQUALS (STRICT CONTRACT) =====
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        if (this.getClass() != o.getClass()) return false;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;              // reflexive
+        if (obj == null) return false;             // null-safe
+        if (this.getClass() != obj.getClass()) return false; // type-safe
 
-        Length other = (Length) o;
+        Length other = (Length) obj;
         return compare(other);
     }
 
-    // ===== MAIN (for quick test) =====
-    public static void main(String[] args) {
-
-        Length length1 = new Length(1.0, LengthUnit.FEET);
-        Length length2 = new Length(12.0, LengthUnit.INCHES);
-        System.out.println(length1.equals(length2)); // true
-
-        Length length3 = new Length(1.0, LengthUnit.YARDS);
-        Length length4 = new Length(36.0, LengthUnit.INCHES);
-        System.out.println(length3.equals(length4)); // true
-
-        Length length5 = new Length(100.0, LengthUnit.CENTIMETERS);
-        Length length6 = new Length(39.3701, LengthUnit.INCHES);
-        System.out.println(length5.equals(length6)); // true
+    // ===== HASHCODE (IMPORTANT FOR UC9) =====
+    @Override
+    public int hashCode() {
+        long normalized = Math.round(toBaseUnit() / EPSILON);
+        return Long.hashCode(normalized);
     }
 }

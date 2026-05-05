@@ -2,10 +2,6 @@ package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 
-    public static boolean demonstrateLengthEquality(Length l1, Length l2) {
-        return l1.equals(l2);
-    }
-
     public static boolean demonstrateLengthComparison(
             double v1, Length.LengthUnit u1,
             double v2, Length.LengthUnit u2) {
@@ -15,8 +11,8 @@ public class QuantityMeasurementApp {
 
         boolean result = l1.equals(l2);
 
-        System.out.println("Comparing " + v1 + " " + u1 +
-                " and " + v2 + " " + u2 + " → " + result);
+        System.out.println(v1 + " " + u1 + " == " +
+                           v2 + " " + u2 + " → " + result);
 
         return result;
     }
