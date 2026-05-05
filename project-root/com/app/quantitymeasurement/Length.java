@@ -1,31 +1,14 @@
-package com.apps.quantitymeasurement;
+package com.app.quantitymeasurement;
+
+import java.util.Objects;
 
 public class Length {
 
     private final double value;
     private final LengthUnit unit;
 
-    private static final double EPSILON = 0.0001; // precision handling
+    private static final double EPSILON = 0.0001;
 
-    // ===== ENUM =====
-    public enum LengthUnit {
-        FEET(12.0),
-        INCHES(1.0),
-        YARDS(36.0),
-        CENTIMETERS(0.393701);
-
-        private final double conversionFactor;
-
-        LengthUnit(double conversionFactor) {
-            this.conversionFactor = conversionFactor;
-        }
-
-        public double getConversionFactor() {
-            return conversionFactor;
-        }
-    }
-
-    // ===== CONSTRUCTOR =====
     public Length(double value, LengthUnit unit) {
         if (unit == null) {
             throw new IllegalArgumentException("Unit cannot be null");
@@ -34,32 +17,32 @@ public class Length {
         this.unit = unit;
     }
 
-    // ===== CONVERT TO BASE UNIT (INCHES) =====
     private double toBaseUnit() {
-        return this.value * this.unit.getConversionFactor();
+        return unit.toBase(value);
     }
 
-    // ===== PRECISION SAFE COMPARISON =====
-    public boolean compare(Length other) {
+    public boolean isEqual(Length other) {
         double diff = Math.abs(this.toBaseUnit() - other.toBaseUnit());
         return diff < EPSILON;
     }
 
-    // ===== EQUALS (STRICT CONTRACT) =====
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;              // reflexive
-        if (obj == null) return false;             // null-safe
-        if (this.getClass() != obj.getClass()) return false; // type-safe
+        if (this == obj) return true;
+        if (!(obj instanceof Length)) return false;
 
         Length other = (Length) obj;
-        return compare(other);
+        return isEqual(other);
     }
 
-    // ===== HASHCODE (IMPORTANT FOR UC9) =====
     @Override
     public int hashCode() {
         long normalized = Math.round(toBaseUnit() / EPSILON);
-        return Long.hashCode(normalized);
+        return Objects.hash(normalized);
+    }
+
+    @Override
+    public String toString() {
+        return value + " " + unit;
     }
 }
