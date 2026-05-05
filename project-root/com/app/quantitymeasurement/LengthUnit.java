@@ -1,4 +1,4 @@
-package com.app.quantitymeasurement;
+package com.apps.quantitymeasurement;
 
 public enum LengthUnit {
 
@@ -14,6 +14,6 @@ public enum LengthUnit {
     }
 
     public double toBase(double value) {
-        return value * conversionFactor; // base = inches
+        return value * conversionFactor;
     }
 }

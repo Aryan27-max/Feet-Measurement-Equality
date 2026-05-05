@@ -1,4 +1,4 @@
-package com.app.quantitymeasurement;
+package com.apps.quantitymeasurement;
 
 import java.util.Objects;
 
@@ -10,9 +10,16 @@ public class Length {
     private static final double EPSILON = 0.0001;
 
     public Length(double value, LengthUnit unit) {
+
         if (unit == null) {
             throw new IllegalArgumentException("Unit cannot be null");
         }
+
+        // ===== UC11: VALUE VALIDATION =====
+        if (value < 0) {
+            throw new IllegalArgumentException("Length cannot be negative");
+        }
+
         this.value = value;
         this.unit = unit;
     }

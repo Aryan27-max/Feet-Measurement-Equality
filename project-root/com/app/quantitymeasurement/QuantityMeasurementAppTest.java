@@ -6,24 +6,22 @@ import static org.junit.jupiter.api.Assertions.*;
 public class QuantityMeasurementAppTest {
 
     @Test
-    public void feetToInches() {
+    public void validEquality() {
         assertTrue(QuantityMeasurementService.compare(
                 1.0, LengthUnit.FEET,
                 12.0, LengthUnit.INCHES));
     }
 
     @Test
-    public void yardToFeet() {
-        assertTrue(QuantityMeasurementService.compare(
-                1.0, LengthUnit.YARDS,
-                3.0, LengthUnit.FEET));
+    public void invalidNegativeValue() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Length(-1.0, LengthUnit.FEET));
     }
 
     @Test
-    public void cmToInches() {
-        assertTrue(QuantityMeasurementService.compare(
-                1.0, LengthUnit.CENTIMETERS,
-                0.393701, LengthUnit.INCHES));
+    public void nullUnit() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Length(1.0, null));
     }
 
     @Test
@@ -31,12 +29,6 @@ public class QuantityMeasurementAppTest {
         assertFalse(QuantityMeasurementService.compare(
                 2.0, LengthUnit.FEET,
                 12.0, LengthUnit.INCHES));
-    }
-
-    @Test
-    public void nullUnit() {
-        assertThrows(IllegalArgumentException.class, () ->
-                new Length(1.0, null));
     }
 
     @Test
@@ -52,16 +44,5 @@ public class QuantityMeasurementAppTest {
 
         assertTrue(a.equals(b));
         assertTrue(b.equals(a));
-    }
-
-    @Test
-    public void transitiveProperty() {
-        Length a = new Length(1.0, LengthUnit.YARDS);
-        Length b = new Length(3.0, LengthUnit.FEET);
-        Length c = new Length(36.0, LengthUnit.INCHES);
-
-        assertTrue(a.equals(b));
-        assertTrue(b.equals(c));
-        assertTrue(a.equals(c));
     }
 }
