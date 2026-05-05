@@ -2,13 +2,13 @@ package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementService {
 
-    public static boolean compare(
-            double v1, LengthUnit u1,
-            double v2, LengthUnit u2) {
+    public static <U extends Unit> boolean compare(
+            double v1, U u1,
+            double v2, U u2) {
 
-        Length l1 = new Length(v1, u1);
-        Length l2 = new Length(v2, u2);
+        Quantity<U> q1 = new Quantity<>(v1, u1);
+        Quantity<U> q2 = new Quantity<>(v2, u2);
 
-        return l1.equals(l2);
+        return q1.equals(q2);
     }
 }

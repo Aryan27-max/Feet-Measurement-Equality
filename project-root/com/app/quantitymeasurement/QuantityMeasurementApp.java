@@ -4,23 +4,32 @@ public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        System.out.println(QuantityMeasurementService.compare(
-                1.0, LengthUnit.FEET,
-                12.0, LengthUnit.INCHES)); // true
+        // ===== LENGTH =====
+        System.out.println(
+                QuantityMeasurementService.compare(
+                        1.0, LengthUnit.FEET,
+                        12.0, LengthUnit.INCHES)); // true
 
-        System.out.println(QuantityMeasurementService.compare(
-                1.0, LengthUnit.YARDS,
-                3.0, LengthUnit.FEET)); // true
+        System.out.println(
+                QuantityMeasurementService.compare(
+                        1.0, LengthUnit.YARDS,
+                        36.0, LengthUnit.INCHES)); // true
 
-        System.out.println(QuantityMeasurementService.compare(
-                100.0, LengthUnit.CENTIMETERS,
-                39.3701, LengthUnit.INCHES)); // true
+        // ===== WEIGHT =====
+        System.out.println(
+                QuantityMeasurementService.compare(
+                        1.0, WeightUnit.KILOGRAM,
+                        1000.0, WeightUnit.GRAM)); // true
 
-        // ===== UC11 TEST (INVALID VALUE) =====
-        try {
-            Length invalid = new Length(-5.0, LengthUnit.FEET);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        System.out.println(
+                QuantityMeasurementService.compare(
+                        1.0, WeightUnit.KILOGRAM,
+                        2.0, WeightUnit.POUND)); // false
+
+        // ===== INVALID CROSS TYPE =====
+        Quantity<LengthUnit> length = new Quantity<>(1.0, LengthUnit.FEET);
+        Quantity<WeightUnit> weight = new Quantity<>(1.0, WeightUnit.KILOGRAM);
+
+        System.out.println(length.equals(weight)); // false
     }
 }
